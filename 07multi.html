@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimedia</title>
+</head>
+<body>
+    <center>
+        <h1>MULTIMEDIA</h1>
+        <br>
+        <h3><a href="index.html">REGRESAR</a></h3>
+
+        <video width="640" height="360" controls autoplay muted loop poster="img/tim.jpg">
+            <source src="archivos/videotiktok1.mp4" type="video/mp4">
+        </video>
+        <h3>EJEMPLO AUDIO</h3>
+        <audio controls autoplay loop>
+            <source src="archivos/audio1.mp3" type="audio/mpeg">
+        </audio>
+
+
+        <h3>EJEMPLO IMAGEN CON RUTA RELATIVA</h3>
+        <img src="Img/tim.jpg" alt="TIM BERNES LEE" width="400" height="300" loading="lazy" border="10px">
+        <h3>EJEMPLO IMAGEN CON RUTA ABSOLUTA</h3>
+        <img src="https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/store/software/switch/70010000040331/96118506c3829370249225b8e82f1ae061036bdcf337b0265258efe1f8cf3bd9" width="400" height="300" loading="lazy" border="10px">
+
+        <h3>EJEMPLO VIDEO CON SUBTITULOS</h3>
+        <video width="600" controls>
+    <source src="archivos/CARS.mp4" type="video/mp4">
+    <track src="archivos/subtitulosCARS.vtt" kind="subtitles" srclang="es" label="Español" default>
+    Tu navegador no soporta el elemento de video.
+    </video>
+
+    <!-- INICIO SECCIÓN SVG -->
+<br>
+<h3>EJEMPLO SVG</h3>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<defs>
+    <!-- Degradado de color de fondo -->
+    <linearGradient id="gradienteSVG" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" style="stop-color:#ff4b1f;stop-opacity:1" />
+    }<stop offset="100%" style="stop-color:#ff9068;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Sombra sutil -->
+    <filter id="sombraSVG" x="-10%" y="-10%" width="120%" height="120%">
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.3"/>
+    </filter>
+</defs>
+
+<!-- Círculo de fondo -->
+<circle cx="100" cy="100" r="80" fill="url(#gradienteSVG)" filter="url(#sombraSVG)" />
+
+<!-- Figura de Estrella Blanca en el centro -->
+<polygon points="100,45 115,75 148,80 124,103 130,136 100,120 70,136 76,103 52,80 85,75" fill="#ffffff" />
+</svg>
+<!-- FIN SECCIÓN SVG -->
+
+
+        <h3>EJEMPLO CANVAS</h3>
+        <div style="text-align: center; background-color: #0b0f19; padding: 20px; border-radius: 10px; width: fit-content; margin: 10px auto;">
+    <h2 style="color: #38bdf8; margin-top: 0; font-family: sans-serif;">Interactive Canvas</h2>
+    <p style="color: #94a3b8; font-family: sans-serif; margin-bottom: 15px;">Colorful bouncing balls demonstrating HTML5 Canvas & JavaScript</p>
+    
+    <!-- El elemento Canvas -->
+    <canvas id="miCanvasInteractivo" width="600" height="400" style="background-color: #0f172a; border-radius: 8px; cursor: pointer; border: 1px solid #1e293b;"></canvas>
+    
+    <p style="color: #64748b; font-family: sans-serif; font-size: 14px; margin-top: 15px; margin-bottom: 0;">¡Haz clic en el canvas para añadir más pelotas!</p>
+</div>
+
+<script>
+    const canvas = document.getElementById('miCanvasInteractivo');
+    const ctx = canvas.getContext('2d');
+    const pelotas = [];
+    
+    // Paleta de colores vibrantes como en la imagen de referencia
+    const colores = ['#ef4444', '#f97316', '#facc15', '#4ade80', '#06b6d4', '#a855f7', '#ec4899'];
+
+    // Clase para crear y manejar cada pelota
+    class Pelota {
+        constructor(x, y) {
+            this.radio = Math.random() * 15 + 10; // Tamaño aleatorio entre 10 y 25
+            // Si se pasa x, y (por el clic), usa esa posición, si no, posición aleatoria
+            this.x = x || Math.random() * (canvas.width - this.radio * 2) + this.radio;
+            this.y = y || Math.random() * (canvas.height - this.radio * 2) + this.radio;
+            this.dx = (Math.random() - 0.5) * 5; // Velocidad X aleatoria
+            this.dy = (Math.random() - 0.5) * 5; // Velocidad Y aleatoria
+            this.color = colores[Math.floor(Math.random() * colores.length)];
+        }
+
+        dibujar() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radio, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            
+            // Efecto de brillo (glow)
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = this.color;
+            
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        actualizar() {
+            // Detectar colisión con las paredes para rebotar
+            if (this.x + this.radio > canvas.width || this.x - this.radio < 0) {
+                this.dx = -this.dx;
+            }
+            if (this.y + this.radio > canvas.height || this.y - this.radio < 0) {
+                this.dy = -this.dy;
+            }
+
+            // Mover la pelota
+            this.x += this.dx;
+            this.y += this.dy;
+
+            this.dibujar();
+        }
+    }
+
+    // Crear 40 pelotas iniciales
+    for (let i = 0; i < 40; i++) {
+        pelotas.push(new Pelota());
+    }
+
+    // Bucle de animación
+    function animarMultiples() {
+        requestAnimationFrame(animarMultiples);
+        
+        // Limpiar el canvas en cada frame
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Efecto para que los colores brillen más cuando se superponen
+        ctx.globalCompositeOperation = 'screen';
+
+        // Actualizar y dibujar todas las pelotas
+        pelotas.forEach(pelota => pelota.actualizar());
+    }
+
+    animarMultiples();
+
+    // Evento interactivo: Añadir pelotas al hacer clic
+    canvas.addEventListener('click', function(event) {
+        const rect = canvas.getBoundingClientRect();
+        // Calcular la posición exacta del ratón dentro del canvas
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+        
+        // Añadir 3 pelotas nuevas en la posición del clic
+        for(let i = 0; i < 3; i++) {
+            pelotas.push(new Pelota(mouseX, mouseY));
+        }
+    });
+</script>
+
+
+    </center>
+</body>
+</html>
